@@ -1,0 +1,2 @@
+numpy~=2.2.3
+ucimlrepo~=0.0.7
