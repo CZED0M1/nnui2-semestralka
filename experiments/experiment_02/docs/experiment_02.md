@@ -25,7 +25,7 @@ Model s 32 neurony ve skryté vrstvě dosáhl velmi nízké hodnoty ztráty běh
 ### Graf trénovací chyby
 Vývoj trénovací chyby během trénování je zobrazen v grafu níže. Pozorujeme, jak se ztráta rychle snižuje na velmi nízké hodnoty.
 
-![Trénovací chyba](plot.png)
+![Trénovací chyba](../images/plot.png)
 
 ### Předpovědi na trénovacích datech
 Po dokončení trénování modelu s 32 neurony byly předpovědi na trénovacích datech velmi přesné:
@@ -44,7 +44,7 @@ Předpovědi po načtení modelu:
  [ 1.00000000e+00]
  [-9.49851309e-13]]
  
- ![Porovnání skutečné funkce a předpovědi nejlepšího modelu](plot2.png)
+ ![Porovnání skutečné funkce a předpovědi nejlepšího modelu](../images/plot2.png)
 
 
 ## Výsledky na testovací množině
