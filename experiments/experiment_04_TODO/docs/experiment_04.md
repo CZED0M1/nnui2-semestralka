@@ -1,56 +1,51 @@
 ---
-title: "Experiment 02"
+title: "Experiment 04"
 author: "Dominik Lopauer"
-date: "2025-03-25"
+date: "2025-05-09"
 ---
 
-# Experiment 02: Trénování neuronové sítě s různým počtem neuronů ve skryté vrstvě
+# Experiment 04: Srovnání různých topologií FFNN na úloze klasifikace dopravních značek (GTSRB)
 
 ## Popis úlohy
-Cílem tohoto experimentu bylo porovnat výkon neuronové sítě s různým počtem neuronů ve skryté vrstvě. Úloha zahrnovala trénování modelu na datech generovaných pomocí funkce sinus a hodnocení výkonnosti modelu na základě trénovací chyby (MSE). Po každém trénování byla uložena váha modelu a testována na trénovacích datech.
+Cílem experimentu bylo porovnat různé topologie dopředných neuronových sítí (FFNN) při klasifikaci dopravních značek z datasetu GTSRB. Síť byla trénována na 43 třídách dopravních značek. Experiment hodnotí výkonnost modelů pomocí metriky **validační přesnosti** a **validační ztráty**.
+
+Každá topologie byla natrénována **10×** a výsledky byly porovnány pomocí boxplotů.
 
 ## Parametry trénování
-- **Počet epoch:** 1000
+- **Počet epoch:** 1 (z důvodu časové náročnosti)
 - **Koeficient učení:** 0.001
-- **Počet neuronů ve skryté vrstvě:** 2, 4, 8, 16, 32
-- **Vstupní velikost:** 1 (jednoduchý vektor)
-- **Výstupní velikost:** 1 (jednoduchý vektor)
+- **Velikost dávky:** 128
+- **Optimalizátor:** Adam
+- **Ztrátová funkce:** CrossEntropyLoss
+- **Velikost vstupu:** 32×32×3 (obrázky)
+- **Počet výstupních tříd:** 43
+- **Transformace:** Resize, ToTensor, Normalize
+
+## Porovnávané topologie
+- **Topologie 1:** [256]
+- **Topologie 2:** [512, 256]
+- **Topologie 3:** [1024, 512, 256]
+- **Topologie 4:** [1024, 512, 256, 128]
+- **Topologie 5:** [2048, 1024, 512, 256, 128]
+
+## Výsledky – boxploty
+
+![Boxplot validační přesnosti](../images/boxplot_accuracy.png)
+
+![Boxplot validační chyby](../images/boxplot_loss.png)
+
+Boxploty ukazují rozložení přesnosti a chyb pro každou topologii na validační množině. Nejvyšší medián přesnosti byla dosažena u **Topologie 2**, což ji činí nejlepší volbou pro tuto klasifikační úlohu.
 
 ## Popis nejlepšího modelu
-Nejlepší model byl dosažen s **32 neurony ve skryté vrstvě**, kde byla trénovací chyba nejnižší. Po trénování modelu byly získány následující výsledky:
+Nejlepšího výsledku bylo dosaženo s topologií **[512, 256]**. Tato architektura obsahuje pět skrytých vrstev s postupně se zmenšujícím počtem neuronů. Dosáhla nejvyšší mediánové přesnosti při validaci a ukázala schopnost dobře generalizovat.
 
-### Hodnoty vah a prahů:
-Model s 32 neurony ve skryté vrstvě dosáhl velmi nízké hodnoty ztráty během trénování. Trénovací chyba klesla až na hodnoty blízké nule, což je indikátor dobré konvergence modelu.
+Model byl po finálním natrénování uložen jako `best_model.pt`.
 
-### Graf trénovací chyby
-Vývoj trénovací chyby během trénování je zobrazen v grafu níže. Pozorujeme, jak se ztráta rychle snižuje na velmi nízké hodnoty.
-
-![Trénovací chyba](../images/plot.png)
-
-### Předpovědi na trénovacích datech
-Po dokončení trénování modelu s 32 neurony byly předpovědi na trénovacích datech velmi přesné:
-
-Předpovědi po trénování:
-
-[[-9.62063762e-13]
- [ 1.00000000e+00]
- [ 1.00000000e+00]
- [-9.49851309e-13]]
-
-Předpovědi po načtení modelu:
-
-[[-9.62063762e-13]
- [ 1.00000000e+00]
- [ 1.00000000e+00]
- [-9.49851309e-13]]
- 
- ![Porovnání skutečné funkce a předpovědi nejlepšího modelu](../images/plot2.png)
-
-
-## Výsledky na testovací množině
-Testování modelu na trénovacích datech ukázalo, že model s 32 neurony v skryté vrstvě dosahuje vysoké přesnosti, s velmi nízkou chybou mezi skutečnými hodnotami a předpověďmi modelu.
+![confusion_matrix](../images/confusion_matrix.png)
 
 ## Závěr
-Model s 32 neurony ve skryté vrstvě se ukázal jako nejlepší, protože vykazoval nejlepší výkon na trénovacích datech. Bylo pozorováno, že jak se zvyšoval počet neuronů, model byl schopný lépe zachytit složitější vzory v datech, což vedlo k nižší chybě.
 
-Nejlepší model je uložen jako `model_32_neurons.npz`.
+- FFNN dokázaly klasifikovat dopravní značky z GTSRB s přesností okolo 73 % na testu
+- Topologie s dvěma skrytými vrstvami ([512, 256]) poskytla nejlepší výsledky
+---
+
